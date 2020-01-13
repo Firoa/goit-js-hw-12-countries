@@ -1,5 +1,6 @@
 import './styles.css';
 import _ from 'lodash';
+import fetchCountries from './js/fetchCountries'
 
 import PNotify from 'pnotify/dist/es/PNotify';
 import PNotifyStyleMaterial from 'pnotify/dist/es/PNotifyStyleMaterial.js';
@@ -23,6 +24,7 @@ ressultNode.addEventListener(
   'click',
   _.debounce(() => {
     console.log('d');
+    fetchCountries.fetchCountry("USA");
   }, 500),
 );
 
