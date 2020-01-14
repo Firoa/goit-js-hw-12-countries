@@ -12,9 +12,6 @@ PNotify.defaults.icons = 'material';
 
 const inputParrentNode = document.querySelector('.country_input');
 const ressultNode = document.querySelector('.contry_list');
-const baseUrl = 'https://restcountries.eu/rest/v2/name/';
-console.log(inputParrentNode);
-console.log(ressultNode);
 
 function logOK() {
   console.log('ok');
@@ -22,33 +19,49 @@ function logOK() {
 
 ressultNode.addEventListener(
   'click',
-  _.debounce(() => {
-    console.log('d');
-    fetchCountries.fetchCountry('s');
+  _.debounce(() => {        
   }, 500),
 );
 
 inputParrentNode.addEventListener(
   'keyup',
-  _.debounce(({ target }) => {
-    console.log(target.value);
+  _.debounce(({ target }) => {    
     let namePice = target.value;
     if (namePice !== '') {
-      fetchCountries.fetchCountry(namePice);
+      fetchCountries
+        .fetchCountry(namePice)
+        .then(data => {         
+          if (data.length > 1 && data.length <= 10) {
+            console.log('return list of country');
+            ressultNode.innerHTML= "" ;
+            ressultNode.insertAdjacentHTML(
+              'afterbegin',
+              createList(data.map(({ name }) => name)),
+            );
+          }
+          if (data.length > 10) {
+            console.log('to many countries match');
+            PNotify.error({
+              text: 'Too many matches',
+              type: 'notice',
+            });
+          }
+        })
+        .catch(data => {
+          console.log('Dont exist');         
+          PNotify.notice({
+            text: 'Dont exist',
+            type: 'notice',
+          });
+        });
     }
   }, 500),
 );
 
 const createList = function(countries) {
-  console.log(countries);
   return countries
     .map(countrie => {
-      return `<li>${countrie}</li>`;
+      return `<li class="listItem" >${countrie}</li>`;
     })
     .join('\n');
 };
-console.log(createList(['USA', 'DEB', 'RESM']));
-ressultNode.insertAdjacentHTML(
-  'afterbegin',
-  createList(['USA', 'DEB', 'RESM']),
-);
