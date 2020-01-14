@@ -1,6 +1,6 @@
 import './styles.css';
 import _ from 'lodash';
-import fetchCountries from './js/fetchCountries'
+import fetchCountries from './js/fetchCountries';
 
 import PNotify from 'pnotify/dist/es/PNotify';
 import PNotifyStyleMaterial from 'pnotify/dist/es/PNotifyStyleMaterial.js';
@@ -11,7 +11,7 @@ PNotify.defaults.styling = 'material';
 PNotify.defaults.icons = 'material';
 
 const inputParrentNode = document.querySelector('.country_input');
-const ressultNode = document.querySelector('.result_wrapper');
+const ressultNode = document.querySelector('.contry_list');
 const baseUrl = 'https://restcountries.eu/rest/v2/name/';
 console.log(inputParrentNode);
 console.log(ressultNode);
@@ -24,7 +24,7 @@ ressultNode.addEventListener(
   'click',
   _.debounce(() => {
     console.log('d');
-    fetchCountries.fetchCountry("USA");
+    fetchCountries.fetchCountry('s');
   }, 500),
 );
 
@@ -34,29 +34,21 @@ inputParrentNode.addEventListener(
     console.log(target.value);
     let namePice = target.value;
     if (namePice !== '') {
-      fetch(baseUrl + namePice)
-        .then(response => {
-          console.log(response);
-          return response.json();
-        })
-        .then(data => {
-          console.log(data);
-          if (data.length > 1 && data.length <= 10) {
-            console.log('return list of country');
-          }
-          if (data.length > 10) {
-            console.log('to many countries match');
-            PNotify.error({
-              text: 'Too many matches',
-              type: 'notice',
-              dir1: 'down',
-              dir2: 'left',
-            });
-          }
-        })
-        .catch(() => {
-          console.log('Dont exist');
-        });
+      fetchCountries.fetchCountry(namePice);
     }
   }, 500),
+);
+
+const createList = function(countries) {
+  console.log(countries);
+  return countries
+    .map(countrie => {
+      return `<li>${countrie}</li>`;
+    })
+    .join('\n');
+};
+console.log(createList(['USA', 'DEB', 'RESM']));
+ressultNode.insertAdjacentHTML(
+  'afterbegin',
+  createList(['USA', 'DEB', 'RESM']),
 );
