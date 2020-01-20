@@ -30,7 +30,12 @@ inputParrentNode.addEventListener(
     if (namePice !== '') {
       fetchCountries
         .fetchCountry(namePice)
-        .then(data => {         
+        .then(data => { 
+         
+          if (data.length === 1) 
+          {
+            ressultNode.style.height = '0px';
+          }       
           if (data.length > 1 && data.length <= 10) {
             console.log('return list of country');
             ressultNode.innerHTML= "" ;
