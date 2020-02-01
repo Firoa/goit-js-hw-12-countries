@@ -1,6 +1,7 @@
 import './styles.css';
 import _ from 'lodash';
 import fetchCountries from './js/fetchCountries';
+import countryInfoMarkup from './templates/countryInfoMarkup.hbs'
 
 import PNotify from 'pnotify/dist/es/PNotify';
 import PNotifyStyleMaterial from 'pnotify/dist/es/PNotifyStyleMaterial.js';
@@ -12,6 +13,7 @@ PNotify.defaults.icons = 'material';
 
 const inputParrentNode = document.querySelector('.country_input');
 const ressultNode = document.querySelector('.contry_list');
+const resultWraperNode = document.querySelector('.country-info');
 
 function logOK() {
   console.log('ok');
@@ -31,10 +33,12 @@ inputParrentNode.addEventListener(
       fetchCountries
         .fetchCountry(namePice)
         .then(data => { 
-         
+         console.log(data[0]);
           if (data.length === 1) 
           {
+            ressultNode.innerHTML= "" ;
             ressultNode.style.height = '0px';
+            setCoutryInfo(data);
           }       
           if (data.length > 1 && data.length <= 10) {
             console.log('return list of country');
@@ -53,6 +57,7 @@ inputParrentNode.addEventListener(
           }
         })
         .catch(data => {
+          console.log(data);  
           console.log('Dont exist');         
           PNotify.notice({
             text: 'Dont exist',
@@ -70,3 +75,7 @@ const createList = function(countries) {
     })
     .join('\n');
 };
+
+const setCoutryInfo = function(data){  
+  resultWraperNode.insertAdjacentHTML('beforeend', countryInfoMarkup(data[0]));
+}
