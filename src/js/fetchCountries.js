@@ -7,9 +7,6 @@ PNotify.defaults.icons = 'material';
 const baseUrl = 'https://restcountries.eu/rest/v2/name/';
 export default {
   fetchCountry(namePice) {
-    return fetch(baseUrl + namePice).then(response => {
-      console.log(response);
-      return response.json();
-    });
+    return fetch(baseUrl + namePice).then(response => response.json()).catch(error => console.log("firts catch dont exist"));
   },
 };

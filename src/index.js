@@ -1,7 +1,7 @@
 import './styles.css';
 import _ from 'lodash';
 import fetchCountries from './js/fetchCountries';
-import countryInfoMarkup from './templates/countryInfoMarkup.hbs'
+import countryInfoMarkup from './templates/countryInfoMarkup.hbs';
 
 import PNotify from 'pnotify/dist/es/PNotify';
 import PNotifyStyleMaterial from 'pnotify/dist/es/PNotifyStyleMaterial.js';
@@ -21,28 +21,27 @@ function logOK() {
 
 ressultNode.addEventListener(
   'click',
-  _.debounce(() => {        
-  }, 500),
+  _.debounce(() => {}, 500),
 );
 
 inputParrentNode.addEventListener(
   'keyup',
-  _.debounce(({ target }) => {    
+  _.debounce(({ target }) => {
     let namePice = target.value;
     if (namePice !== '') {
       fetchCountries
         .fetchCountry(namePice)
-        .then(data => { 
-         console.log(data[0]);
-          if (data.length === 1) 
-          {
-            ressultNode.innerHTML= "" ;
+        .then(data => {         
+          if (data.length === 1) {
+            ressultNode.innerHTML = '';
             ressultNode.style.height = '0px';
-            setCoutryInfo(data);
-          }       
+            resultWraperNode.innerHTML = '';
+            setCoutryInfo(data, resultWraperNode);
+          }
           if (data.length > 1 && data.length <= 10) {
-            console.log('return list of country');
-            ressultNode.innerHTML= "" ;
+            resultWraperNode.innerHTML = '';            
+            ressultNode.style.height = '';
+            ressultNode.innerHTML = '';
             ressultNode.insertAdjacentHTML(
               'afterbegin',
               createList(data.map(({ name }) => name)),
@@ -57,8 +56,8 @@ inputParrentNode.addEventListener(
           }
         })
         .catch(data => {
-          console.log(data);  
-          console.log('Dont exist');         
+          console.log("catch log second:",data);
+          console.log('catch log second: Dont exist');
           PNotify.notice({
             text: 'Dont exist',
             type: 'notice',
@@ -76,6 +75,6 @@ const createList = function(countries) {
     .join('\n');
 };
 
-const setCoutryInfo = function(data){  
-  resultWraperNode.insertAdjacentHTML('beforeend', countryInfoMarkup(data[0]));
-}
+const setCoutryInfo = function(data, insertNode) {
+  insertNode.insertAdjacentHTML('beforeend', countryInfoMarkup(data[0]));
+};
