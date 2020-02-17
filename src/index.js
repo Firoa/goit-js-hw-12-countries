@@ -19,27 +19,29 @@ function logOK() {
   console.log('ok');
 }
 
-ressultNode.addEventListener(
-  'click',
-  _.debounce(() => {}, 500),
-);
-
 inputParrentNode.addEventListener(
   'keyup',
-  _.debounce(({ target }) => {
-    let namePice = target.value;
+  _.debounce(({ target }) => {    
+    let namePice = target.value;    
     if (namePice !== '') {
       fetchCountries
         .fetchCountry(namePice)
-        .then(data => {         
+        .then(data => {
+          if (data.status === 404){
+            console.log(data);
+            PNotify.notice({
+              text: data.message,
+              type: 'notice',
+            });
+          }
           if (data.length === 1) {
             ressultNode.innerHTML = '';
             ressultNode.style.height = '0px';
-            resultWraperNode.innerHTML = '';
+            resultWraperNode.innerHTML = '';           
             setCoutryInfo(data, resultWraperNode);
           }
           if (data.length > 1 && data.length <= 10) {
-            resultWraperNode.innerHTML = '';            
+            resultWraperNode.innerHTML = '';
             ressultNode.style.height = '';
             ressultNode.innerHTML = '';
             ressultNode.insertAdjacentHTML(
@@ -55,14 +57,11 @@ inputParrentNode.addEventListener(
             });
           }
         })
-        .catch(data => {
-          console.log("catch log second:",data);
-          console.log('catch log second: Dont exist');
-          PNotify.notice({
-            text: 'Dont exist',
-            type: 'notice',
-          });
-        });
+        
+    }
+    else{
+      ressultNode.innerHTML = '';
+      resultWraperNode.innerHTML = '';
     }
   }, 500),
 );
@@ -78,3 +77,15 @@ const createList = function(countries) {
 const setCoutryInfo = function(data, insertNode) {
   insertNode.insertAdjacentHTML('beforeend', countryInfoMarkup(data[0]));
 };
+
+async function fetchData(namePice) {
+  try {
+    const response = await fetch(
+      'https://restcountries.eu/rest/v2/name/gggggg',
+    );
+    const data = await response.json();
+    console.log(data);
+  } catch (err) {
+    alert(err.message);
+  }
+}

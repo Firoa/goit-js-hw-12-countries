@@ -1,22 +1,16 @@
-    
-        <h2 class="country-info_name">{{name}}</h2>
-        <div class="country-info_wrapper">
-          <div class="country-info_text">
-            <p class="country-info_capital">Capital:{{capital}}</p>
-            <p class="country-info_population">Population:{{population}}</p>
-            <div class="country-info_lang">
-              <p>Languages:</p>
-              <ul class="lang_list">
-                  {{#each languages}}<li>{{this.name}}</li>{{/each}}
-              </ul>
-            </div>
-          </div>
-          <div class="country-info_flag-wrapper">
-            <img
-              src="{{flag}}"
-              alt=""
-              class="country-info_img"
-            />
-          </div>
-        </div>
-      
+<h2 class="country-info_name">{{name}}</h2>
+<div class="country-info_wrapper">
+  <div class="country-info_text">
+    <p class="country-info_capital"> <span>Capital: </span>{{capital}}</p>
+    <p class="country-info_population"><span>Population: </span>{{population}}</p>
+    <div class="country-info_lang">
+      <span>Languages:<span>
+      <ul class="lang_list">
+        {{#each languages}}<li>{{this.name}}</li>{{/each}}
+      </ul>
+    </div>
+  </div>
+  <div class="country-info_flag-wrapper">
+    <img src="{{flag}}" alt="" class="country-info_img" />
+  </div>
+</div>
